@@ -57,6 +57,7 @@ pipeline {
                     ps -A | grep emulator | awk '{print $1}' | xargs kill -9 || true
                     '''
 
+                    // JUnit xml
                     sh '''
                     python monkey-to-junit.py output/monkey/monkey.log > output/monkey/monkey.xml
                     '''
@@ -78,28 +79,25 @@ def startEmulator() {
     // reset Android Emulator
     sh 'emulator -wipe-data @Nexus_4_API_23 &'
 
-    // wait for boot up
+    // wait for booting
     sh '''
-    bootanim=""
-    failcounter=0
-    timeout_in_sec=360
+    retry=0
+    while
+        retry=$((retry+1))
 
-    until [[ "$bootanim" =~ "stopped" ]]; do
-        bootanim=`$ANDROID_HOME/platform-tools/adb -e shell getprop init.svc.bootanim 2>&1 &`
-
-        if [[ "$bootanim" =~ "device not found" || "$bootanim" =~ "device offline" || "$bootanim" =~ "running" ]]; then
-            let "failcounter += 1"
-            echo "Waiting for emulator to start"
-
-            if [[ $failcounter -gt timeout_in_sec ]]; then
-                echo "Timeout ($timeout_in_sec seconds) reached; failed to start emulator"
-                exit 1
-            fi
+        command=`adb -e shell getprop init.svc.bootanim`
+        if test $? -eq 0 ; then
+            echo 'Emulator is ready'
+            break
         fi
 
-        sleep 1
-    done
+        if test $retry -ge 90 ; then
+            echo 'Timeout (90 seconds) reached; failed to start emulator'
+            break
+        fi
 
-    echo "Emulator is ready"
+        # check interval: 1 sec
+        sleep 1
+    do :; done
     '''
 }

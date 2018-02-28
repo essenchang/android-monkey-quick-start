@@ -9,5 +9,9 @@ Features:
   * Bug Report
   * Export test result to JUnit xml format.
 
+## Prerequisite
+  * [Android SDK](https://developer.android.com/studio/index.html#downloads)
+  * [junit-xml](https://pypi.python.org/pypi/junit-xml)
+
 ## CI Script
 `$ ./ci.sh` or `Jenkinsfile` for Jenkins Pipeline.
