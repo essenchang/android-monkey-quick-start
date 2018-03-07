@@ -85,8 +85,8 @@ def startEmulator() {
     while
         retry=$((retry+1))
 
-        command=`adb -e shell getprop init.svc.bootanim`
-        if test $? -eq 0 ; then
+        boot=`adb -e shell getprop init.svc.bootanim`
+        if test $? -eq 0 && test "$boot" == 'stopped\r' ; then
             echo 'Emulator is ready'
             break
         fi
