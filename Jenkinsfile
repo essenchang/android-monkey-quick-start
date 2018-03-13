@@ -58,11 +58,11 @@ pipeline {
                     '''
 
                     // JUnit xml
-                    sh '''
-                    python monkey-to-junit.py output/monkey/monkey.log > output/monkey/monkey.xml
-                    '''
+                    //sh '''
+                    //python monkey-to-junit.py output/monkey/monkey.log > output/monkey/monkey.xml
+                    //'''
 
-                    junit "output/monkey/*.xml"
+                    //junit "output/monkey/*.xml"
                     // FIXME: https://issues.jenkins-ci.org/browse/JENKINS-40561
                     // junit testDataPublishers: [[$class: 'TestDataPublisher']], testResults: 'output/monkey/monkey.xml'
 
